@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Teams</h1>
+		<a href="newteam">Add new team</a>
+		<table>
+		<tr>
+			<td>tid</td>
+			<td>tname</td>
+			<td>country</td>
+		</tr>
+    {% for team in teams %}
+
+		<tr>
+			<td><a href="team?tid={{ team.tid }}">{{ team.tid }}</a></td>
+			<td>{{ team.tname }}</td>
+			<td>{{ team.country }}</td>
+		</tr>
+	    
+
+    {% endfor %}
+	</table>
+{% endblock %}

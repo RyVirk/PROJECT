@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Team</h1>
+		<form action="/saveteam" method="POST">
+			Team Name:<br>
+			<input type="text" name="tname" value="{{ team.tname }}" /><br><br>
+			
+			Country:<br>
+			<input type="text" name="country" value="{{ team.country }}" /><br><br>	
+			
+			Group Number:<br>
+			<input type="text" name="groupnum" value="{{ team.groupnum }}" /><br><br>
+			
+			<input type="hidden" name="tid" value="{{ team.tid }}" />
+			
+			<br>
+			
+			<input type="Submit" value="Save Team"/>
+		
+		
+		</form>
+{% endblock %}

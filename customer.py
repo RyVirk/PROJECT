@@ -29,7 +29,10 @@ class customerList(baseObject):
         if not ((self.data[n]['subscribed'] == "True") or (self.data[n]['subscribed'] == "False")):
             self.errorList.append("Subscribed must be True or False")
             
-            
+        if len(self.errorList) > 0:
+            return False
+        else:
+            return True             
             
     def tryLogin(self,email,pw):
         sql = 'SELECT * FROM `' + self.tn + '` WHERE `email` = %s AND `password` = %s;'

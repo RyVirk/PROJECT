@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request,session, redirect, url_for, escape,send_from_directory,make_response 
 
 from customer import customerList
+from team import teamList
 
 import pymysql 
 import json
@@ -26,15 +27,36 @@ def get():
     
 @app.route('/login',methods = ['GET','POST'])
 def login():
+    '''
+    -check login
+    -set session
+    -redirect menu
+    --check session on login page
+    '''    
     if request.form.get('email') is not None and request.form.get('password') is not None:
         c = customerList()
         if c.tryLogin(request.form.get('email'),request.form.get('password')):
             print('login ok')
+            session['user'] = c.data[0]
+            session['active'] = time.time()
+            
+            return redirect('main')
         else:
             print('login failed')
-        return ''    
+            return render_template('login.html', title='Login', msg='Incorrect username or password')     
     else:
-        return render_template('login.html', title='Login', msg='Type your email and password to continue.')    
+        if 'msg' not in session.keys() or session['msg'] is None:
+            m = 'Type your email and password to continue.'
+        else: 
+            m = session['msg']
+            session['msg'] = None    
+        return render_template('login.html', title='Login', msg=m)    
+
+@app.route('/logout',methods = ['GET','POST'])
+def logout():
+    del session['user']
+    del session['active'] 
+    return render_template('login.html', title='Login', msg='You have logged out.') 
 
 @app.route('/basichttp')
 def basichttp():
@@ -128,9 +150,99 @@ def savecustomer():
         #return ''
         return render_template('savedcustomer.html', title='Customer Saved', customer=c.data[0])        
 
+'''
+=======================================
+START TEAM PAGES:
+=======================================
+'''
+@app.route('/teams')
+def teams():
+    t = teamList()
+    t.getAll()
+    
+    #print(t.data)
+    #return ''
+    return render_template('team/teams.html', title='Team List', teams=t.data)
+
+
+@app.route('/team')
+def team():
+    t = teamList()
+    if request.args.get(t.pk) is None:
+       return render_template('error.html', msg='No team id given')
+
+    
+    t.getById(request.args.get(t.pk))
+    if len(t.data) <= 0:
+        return render_template('error.html', msg='Team not found')
+            
+    
+    print(t.data)
+    #return ''
+    return render_template('team/team.html', title='Team ', team=t.data[0])
+
+@app.route('/newteam',methods = ['GET','POST'])
+def newteam():
+    if request.form.get('tname') is None:
+        t = teamList()
+        t.set('tname','')
+        t.set('country','')
+        t.set('groupnum','')
+        t.add()      
+        return render_template('team/newteam.html', title='New Team', team=t.data[0]) 
+    else:
+        t = teamList()
+        t.set('tname',request.form.get('tname'))
+        t.set('country',request.form.get('country'))
+        t.set('groupnum',request.form.get('groupnum'))
+        t.add()  
+        if t.verifyNew():     
+            t.insert()
+            print(t.data)
+            return render_template('team/savedteam.html', title='Team Saved', 
+            team=t.data[0])
+        else:    
+            return render_template('team/newteam.html', title='Team Not Saved', 
+            team=t.data[0],msg=t.errorList)
+        
+@app.route('/saveteam',methods = ['GET','POST'])
+def saveteam():
+        t = teamList()
+        t.set('tid',request.form.get('tid'))
+        t.set('tname',request.form.get('tname'))
+        t.set('country',request.form.get('country'))
+        t.set('groupnum',request.form.get('groupnum'))
+        t.add()  
+        t.update()
+        print(t.data)
+        #return ''
+        return render_template('team/savedteam.html', title='Team Saved', team=t.data[0])        
+'''
+=======================================
+END TEAM PAGES:
+=======================================
+'''
+
+
 @app.route('/main')
 def main():
-    return render_template('main.html', title='Main Menu')
+    if checkSession() == False: #check to make sure the user is logged in
+        return redirect('login')
+    userinfo = 'Hello, ' + session['user']['fname']
+    return render_template('main.html', title='Main Menu',msg = userinfo)
+    
+def checkSession():
+    if 'active' in session.keys():    
+        timeSinceActivity = time.time() - session['active']
+        print(timeSinceActivity)
+        if timeSinceActivity > 500:
+            session['msg'] = 'Your session has timed out.'
+            return False
+        else:    
+            session['active'] = time.time()
+            return True
+    else:
+        return False
 
 @app.route('/static/<path:path>')
 def send_static(path):

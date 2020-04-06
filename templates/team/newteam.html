@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>New Team</h1>
+	{% if msg %}
+      <div tid="errormsg">
+	  {% for err in msg %}
+		{{ err }}<br>
+	  {% endfor %}
+	  </div> 
+    {% endif %}
+		<form action="/newteam" method="POST">
+			Team Name:<br>
+			<input type="text" name="tname" /><br><br>
+			
+			Country:<br>
+			<input type="text" name="country" /><br><br>	
+			
+			Group Number:<br>
+			<input type="text" name="groupnum" /><br><br>
+			
+			<br>
+			
+			<input type="Submit" value="Save Team"/>
+		
+		
+		</form>
+{% endblock %}
