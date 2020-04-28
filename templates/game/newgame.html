@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>New Game</h1>
+	{% if msg %}
+      <div gid="errormsg">
+	  {% for err in msg %}
+		{{ err }}<br>
+	  {% endfor %}
+	  </div>
+    {% endif %}
+		
+		<form action="/newgame" method="POST">
+			Game:<br>
+			<input type="text" name="gname" /><br><br>
+			
+			Game Date:<br>
+			<input type="date" name="gdate" /><br><br>
+			
+			TEAM 1:<br>
+			<select name="tid">
+				{% for team in tl %}	
+				<option value="{{team.tid}}">{{team.tname}}</option>
+				{% endfor %}
+			</select>
+
+			<br>
+			<br>
+
+			TEAM 2:<br>
+			<select name="tid">
+				{% for team in tl %}	
+				<option value="{{team.tid}}">{{team.tname}}</option>
+				{% endfor %}
+			</select>			
+			
+			<br>
+			<br>
+			
+			<input type="submit" value="Save Game"/>
+			
+		</form>
+{% endblock %}

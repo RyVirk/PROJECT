@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Player</h1>
+		<form action="/saveplayer" method="POST">
+			Name:<br>
+			<input type="text" name="pname" value="{{ player.pname }}" /><br><br>
+			
+			Age:<br>
+			<input type="text" name="age" value="{{ player.age }}" /><br><br>
+					
+			Position:<br>
+			<input type="text" name="position" value="{{player.position}}" /><br><br>			
+
+			Team:<br>
+			<select name="tid">
+				{% for team in tl %}	
+				<option value="{{team.tid}}">{{team.tname}}</option>
+				{% endfor %}
+			</select>		
+		
+			<input type="hidden" name="pid" value="{{ player.pid }}" />
+			
+			<br>
+		
+			<input type="Submit" value="Save Player"/>
+		
+		
+		</form>
+{% endblock %}

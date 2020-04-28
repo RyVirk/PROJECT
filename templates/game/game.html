@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Game</h1>
+	<form action="/savegame" method="POST">
+		Game:<br>
+		<input type="text" name="gname" value="{{ game.gname }}" /><br><br>
+		
+		Game Date:<br>
+		<input type="date" name="gdate" value="{{ game.gdate }}" /><br><br>
+		
+		TEAM 1:<br>
+			<select name="tid">
+				{% for team in tl %}	
+				<option value="{{team.tid}}">{{team.tname}}</option>
+				{% endfor %}
+			</select>	
+
+		TEAM 2:<br>
+			<select name="tid">
+				{% for team in tl %}	
+				<option value="{{team.tid}}">{{team.tname}}</option>
+				{% endfor %}
+			</select>		
+		
+		<input type="hidden" name="gid" value="{{ game.gid }}" />
+		
+		
+		<br>
+		
+		<input type="submit" value="Save Game"/>
+			
+	</form>
+{% endblock %}

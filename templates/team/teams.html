@@ -8,6 +8,7 @@
 			<td>tid</td>
 			<td>tname</td>
 			<td>country</td>
+			<td>group</td>			
 		</tr>
     {% for team in teams %}
 
@@ -15,6 +16,7 @@
 			<td><a href="team?tid={{ team.tid }}">{{ team.tid }}</a></td>
 			<td>{{ team.tname }}</td>
 			<td>{{ team.country }}</td>
+			<td>{{ team.groupnum }}</td>			
 		</tr>
 	    
 

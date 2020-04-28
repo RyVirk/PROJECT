@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>New Player</h1>
+	{% if msg %}
+      <div pid="errormsg">
+	  {% for err in msg %}
+		{{ err }}<br>
+	  {% endfor %}
+	  </div> 
+    {% endif %}
+		<form action="/newplayer" method="POST">
+			Name:<br>
+			<input type="text" name="pname" /><br><br>
+			
+			Age:<br>
+			<input type="text" name="age" /><br><br>	
+			
+			Position:<br>
+			<input type="text" name="position" /><br><br>
+			
+			Team:<br>
+			<select name="tid">
+				{% for team in tl %}	
+				<option value="{{team.tid}}">{{team.tname}}</option>
+				{% endfor %}
+			</select>	
+
+			
+			<input type="Submit" value="Save Player"/>
+		
+		
+		</form>
+{% endblock %}

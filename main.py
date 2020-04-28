@@ -4,6 +4,8 @@ from flask import request,session, redirect, url_for, escape,send_from_directory
 
 from customer import customerList
 from team import teamList
+from game import gameList
+from player import playerList
 
 import pymysql 
 import json
@@ -223,6 +225,170 @@ END TEAM PAGES:
 =======================================
 '''
 
+
+'''
+=======================================
+START GAME PAGES:
+=======================================
+'''
+@app.route('/games')
+def games():
+    g = gameList()
+    g.getAll()
+    
+    print(g.data)
+    #return ''
+    return render_template('game/games.html', title='Game List', games=g.data)
+
+
+@app.route('/game')
+def game():
+    g = gameList()
+    allTeams = teamList()
+    allTeams.getAll()    
+    if request.args.get(g.pk) is None:
+       return render_template('error.html', msg='No game id given')
+
+    
+    g.getById(request.args.get(g.pk))
+    if len(g.data) <= 0:
+        return render_template('error.html', msg='Game not found')
+            
+    
+    print(g.data)
+    #return ''
+    return render_template('game/game.html', title='Game', game=g.data[0], tl= allTeams.data)
+
+@app.route('/newgame',methods = ['GET','POST'])
+def newgame():
+    if request.form.get('gname') is None:
+        g = gameList()
+        g.set('gname','')
+        g.set('gdate','')
+        g.set('team1','')
+        g.set('team2','')
+        g.add()   
+        allTeams = teamList()
+        allTeams.getAll()        
+        return render_template('game/newgame.html', title='New Game', game=g.data[0], tl= allTeams.data) 
+    else:
+        g = gameList()
+        g.set('gname',request.form.get('gname'))
+        g.set('gdate',request.form.get('gdate'))
+        g.set('team1',request.form.get('team1'))
+        g.set('team2',request.form.get('team2'))
+        g.add()  
+        if g.verifyNew():     
+            g.insert()
+            print(g.data)
+            return render_template('game/savedgame.html', title='Game Saved', 
+            game=g.data[0])
+        else:    
+            return render_template('game/newgame.html', title='Game Not Saved', 
+            game=g.data[0],msg=g.errorList)
+        
+@app.route('/savegame',methods = ['GET','POST'])
+def savegame():
+        g = gameList()
+        g.set('gid',request.form.get('gid'))
+        g.set('gname',request.form.get('gname'))
+        g.set('gdate',request.form.get('gdate'))
+        g.set('team1',request.form.get('team1'))
+        g.set('team2',request.form.get('team2'))
+        g.add()  
+        g.update()
+        print(g.data)
+        #return ''
+        return render_template('game/savedgame.html', title='Game Saved', game=g.data[0])      
+'''
+=======================================
+END GAME PAGES:
+=======================================
+'''
+
+
+
+'''
+=======================================
+START PLAYER PAGES:
+=======================================
+'''
+@app.route('/players')
+def players():
+    p = playerList()
+    p.getAll()
+    
+    print(p.data)
+    #return ''
+    return render_template('player/players.html', title='Player List', players=p.data)
+
+
+@app.route('/player')
+def player():
+    p = playerList()
+    allTeams = teamList()
+    allTeams.getAll()   
+    if request.args.get(p.pk) is None:
+       return render_template('error.html', msg='No player id given')
+
+    
+    p.getById(request.args.get(p.pk))
+    if len(p.data) <= 0:
+        return render_template('error.html', msg='Player not found')
+            
+   
+    print(p.data)
+    #return ''
+    return render_template('player/player.html', title='Player', player=p.data[0],tl= allTeams.data)
+
+@app.route('/newplayer',methods = ['GET','POST'])
+def newplayer():
+    if request.form.get('pname') is None:
+        p = playerList()
+        p.set('pname','')
+        p.set('age','')
+        p.set('position','')
+        p.set('tid','')
+        p.add()
+        allTeams = teamList()
+        allTeams.getAll()
+            
+        return render_template('player/newplayer.html', title='New Player', player=p.data[0],
+        tl= allTeams.data) 
+    else:
+        p = playerList()
+        p.set('pname',request.form.get('pname'))
+        p.set('age',request.form.get('age'))
+        p.set('position',request.form.get('position'))
+        p.set('tid',request.form.get('tid')) #possible problem with naming
+        p.add()  
+        if p.verifyNew():     
+            p.insert()
+            print(p.data)
+            return render_template('player/savedplayer.html', title='Player Saved', 
+            player=p.data[0])
+        else:    
+            return render_template('player/newplayer.html', title='Player Not Saved', 
+            player=p.data[0],msg=p.errorList)
+        
+@app.route('/saveplayer',methods = ['GET','POST'])
+def saveplayer():
+        p = playerList()
+        p.set('pid',request.form.get('pid'))
+        p.set('pname',request.form.get('pname'))
+        p.set('age',request.form.get('age'))
+        p.set('position',request.form.get('position'))
+        p.set('tid',request.form.get('tid'))
+        p.add()  
+        p.update()
+        print(p.data)
+        #return ''
+        return render_template('player/savedplayer.html', title='Player Saved', player=p.data[0])      
+'''
+=======================================
+END PLAYER PAGES:
+=======================================
+'''
 
 @app.route('/main')
 def main():
