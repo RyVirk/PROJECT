@@ -1,4 +1,4 @@
 # PROJECT
 ## SCHEMA AND OUTLINE
-![Schema](roughSchema.jpg)
+![Schema](docs/roughSchema.jpg)
 
