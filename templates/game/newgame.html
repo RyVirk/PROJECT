@@ -18,7 +18,7 @@
 			<input type="date" name="gdate" /><br><br>
 			
 			TEAM 1:<br>
-			<select name="tid">
+			<select name="team1">
 				{% for team in tl %}	
 				<option value="{{team.tid}}">{{team.tname}}</option>
 				{% endfor %}
@@ -28,7 +28,7 @@
 			<br>
 
 			TEAM 2:<br>
-			<select name="tid">
+			<select name="team2">
 				{% for team in tl %}	
 				<option value="{{team.tid}}">{{team.tname}}</option>
 				{% endfor %}
