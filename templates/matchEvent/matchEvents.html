@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Match Events</h1>
+		<a href="newMatchEvent">Add new match event</a>
+		<br><br>
+		<table>
+		<tr>
+			<th>eid</th>
+			<th>ename</th>
+			<th>estat</th>
+			<th>etime</th>
+			<th>pid</th>
+			<th>gid</th>
+			<th>tid</th>			
+		</tr>
+    {% for matchEvent in matchEvents %}
+
+		<tr>
+			<td><a href="matchEvent?id={{ matchEvent.eid }}">{{ matchEvent.eid }}</a></td>
+			<td>{{ matchEvent.ename }}</td>
+			<td>{{ matchEvent.estat }}</td>
+			<td>{{ matchEvent.etime }}</td>
+			<td>{{ matchEvent.pid }}</td>
+			<td>{{ matchEvent.gid }}</td>
+			<td>{{ matchEvent.tid }}</td>			
+			
+		</tr>
+	    
+
+    {% endfor %}
+	</table>
+{% endblock %}

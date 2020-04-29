@@ -6,6 +6,7 @@ from customer import customerList
 from team import teamList
 from game import gameList
 from player import playerList
+from matchEvent import matchEventList
 
 import pymysql 
 import json
@@ -389,6 +390,116 @@ def saveplayer():
 END PLAYER PAGES:
 =======================================
 '''
+
+
+'''
+=======================================
+START matchEvent PAGES:
+=======================================
+'''
+@app.route('/matchEvents')
+def matchEvents():
+    e = matchEventList()
+    e.getAll()
+    
+    print(e.data)
+    #return ''
+    return render_template('matchEvent/matchEvents.html', title='matchEvent List', matchEvents=e.data)
+
+
+@app.route('/matchEvent')
+def matchEvent():
+    e = matchEventList()
+    
+    allPlayers = playerList()
+    allPlayers.getAll() 
+    
+    allGames = gameList()
+    allGames.getAll() 
+    
+    allTeams = teamList()
+    allTeams.getAll()     
+    
+    if request.args.get(e.pk) is None:
+       return render_template('error.html', msg='No matchEvent id given')
+
+    
+    e.getById(request.args.get(e.pk))
+    if len(e.data) <= 0:
+        return render_template('error.html', msg='matchEvent not found')
+            
+    
+    print(e.data)
+    #return ''
+    return render_template('matchEvent/matchEvent.html', title='matchEvent', matchEvent=e.data[0],
+    pl= allPlayers.data, gl= allGames.data, tl= allTeams.data)
+
+@app.route('/newMatchEvent',methods = ['GET','POST'])
+def newMatchEvent():
+    if request.form.get('ename') is None:
+        e = matchEventList()
+        e.set('ename','')
+        e.set('estat','')
+        e.set('etime','')
+        e.set('pid','')
+        e.set('gid','')
+        e.set('tid','')
+        e.set('id','')        
+        e.add()
+
+        allPlayers = playerList()
+        allPlayers.getAll() 
+        
+        allGames = gameList()
+        allGames.getAll() 
+        
+        allTeams = teamList()
+        allTeams.getAll() 
+    
+        return render_template('matchEvent/newMatchEvent.html', title='New matchEvent', matchEvent=e.data[0],
+        pl= allPlayers.data, gl= allGames.data, tl= allTeams.data) 
+    else:
+        e = matchEventList()
+        e.set('ename',request.form.get('ename'))
+        e.set('estat',request.form.get('estat'))
+        e.set('etime',request.form.get('etime'))
+        e.set('pid',request.form.get('pid')) #possible problem with naming
+        e.set('gid',request.form.get('gid'))
+        e.set('tid',request.form.get('tid'))
+        e.set('id',request.form.get('id'))        
+        e.add()  
+        if e.verifyNew():     
+            e.insert()
+            print(e.data)
+            return render_template('matchEvent/savedMatchEvent.html', title='matchEvent Saved', 
+            matchEvent=e.data[0])
+        else:    
+            return render_template('matchEvent/newMatchEvent.html', title='matchEvent Not Saved', 
+            matchEvent=e.data[0],msg=e.errorList)
+        
+@app.route('/saveMatchEvent',methods = ['GET','POST'])
+def saveMatchEvent():
+        e = matchEventList()
+        e.set('eid',request.form.get('eid'))
+        e.set('ename',request.form.get('ename'))
+        e.set('estat',request.form.get('estat'))
+        e.set('etime',request.form.get('etime'))
+        e.set('pid',request.form.get('pid'))
+        e.set('gid',request.form.get('gid'))
+        e.set('tid',request.form.get('tid'))
+        e.set('id',request.form.get('id'))        
+        e.add()  
+        e.update()
+        print(e.data)
+        #return ''
+        return render_template('matchEvent/savedMatchEvent.html', title='matchEvent Saved', matchEvent=e.data[0])      
+'''
+=======================================
+END matchEvent PAGES:
+=======================================
+'''
+
+
 
 @app.route('/main')
 def main():

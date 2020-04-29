@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Match Event</h1>
+		<form action="/saveMatchEvent" method="POST">
+			Event Name:<br>
+			<input type="text" name="ename" value="{{ matchEvent.ename }}" /><br><br>
+			
+			Stat:<br>
+			<input type="text" name="estat" value="{{ matchEvent.estat }}"/><br><br>	
+			
+			Event Time:<br>
+			<label for="quantity">1 minute - 120 minutes: </label>
+			<input type="number" name="etime" min="1" max="120" /><br><br>
+			
+			Player:<br>
+			<select name="pid">
+				{% for player in pl %}	
+				<option value="{{player.pid}}">{{player.pname}}</option>
+				{% endfor %}
+			</select>
+
+			<br>
+
+			Game:<br>
+			<select name="gid">
+				{% for game in gl %}	
+				<option value="{{game.gid}}">{{game.team1}} vs. {{game.team2}}</option>
+				{% endfor %}
+			</select>
+
+			<br>
+
+			Team:<br>
+			<select name="tid">
+				{% for team in tl %}	
+				<option value="{{team.tid}}">{{team.tname}}</option>
+				{% endfor %}
+			</select>			
+
+		<input type="hidden" name="eid" value="{{ matchEvent.eid }}" />
+			
+			<br>
+			<br>
+			
+			<input type="Submit" value="Save Customer"/>
+		
+		
+		</form>
+{% endblock %}
