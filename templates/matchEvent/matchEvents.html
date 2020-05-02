@@ -8,11 +8,11 @@
 		<tr>
 			<th>eid</th>
 			<th>ename</th>
-			<th>estat</th>
-			<th>etime</th>
-			<th>pid</th>
-			<th>gid</th>
-			<th>tid</th>			
+			<th>stat</th>
+			<th>minute</th>
+			<th>player</th>
+			<th>game</th>
+			<th>team</th>			
 		</tr>
     {% for matchEvent in matchEvents %}
 
@@ -21,9 +21,9 @@
 			<td>{{ matchEvent.ename }}</td>
 			<td>{{ matchEvent.estat }}</td>
 			<td>{{ matchEvent.etime }}</td>
-			<td>{{ matchEvent.pid }}</td>
-			<td>{{ matchEvent.gid }}</td>
-			<td>{{ matchEvent.tid }}</td>			
+			<td>{{ matchEvent.pname }}</td>
+			<td>{{ matchEvent.home }} vs. {{ matchEvent.away }}</td>
+			<td>{{ matchEvent.tname }}</td>			
 			
 		</tr>
 	    

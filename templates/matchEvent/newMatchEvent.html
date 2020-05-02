@@ -32,7 +32,7 @@
 			Game:<br>
 			<select name="gid">
 				{% for game in gl %}	
-				<option value="{{game.gid}}">{{game.team1}} vs. {{game.team2}}</option>
+				<option value="{{game.gid}}">{{game.home}} vs. {{game.away}}</option>
 				{% endfor %}
 			</select>
 

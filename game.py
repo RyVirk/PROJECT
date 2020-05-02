@@ -20,6 +20,7 @@ class gameList(baseObject):
         '''
         
         
+        
         if len(self.data[n]['gname']) == 0:
             self.errorList.append("Game name cannot be blank.")
         if len(self.data[n]['gdate']) == 0:
@@ -35,7 +36,22 @@ class gameList(baseObject):
     
     
     
-    
+    def getByTeam(self):
+        '''
+        SELECT *, t.tname AS home, a.tname AS away FROM `teams` t, `teams` a, `games` g 
+        WHERE `t`.`tid` = `g`.`team1` AND `a`.`tid` = `g`.`team2`;
+        
+        '''
+        sql = 'SELECT *, t.tname AS home, a.tname AS away FROM `teams` t, `teams` a, `games` g WHERE `t`.`tid` = `g`.`team1` AND `a`.`tid` = `g`.`team2`' #add 
+        tokens = ()
+        self.connect()
+        cur = self.conn.cursor(pymysql.cursors.DictCursor)
+        #print(sql)
+        #print(tokens)
+        cur.execute(sql,tokens)
+        self.data = []
+        for row in cur:
+            self.data.append(row)    
     
     
     

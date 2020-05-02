@@ -22,6 +22,22 @@ class playerList(baseObject):
             return True    
             
             
+    def getByTeam(self):
+        '''
+        SELECT * 
+        FROM `teams` t, `players` p 
+        WHERE `t`.`tid` = `p`.`tid`;          
+        '''    
+        sql = 'SELECT * FROM `teams` t, `players` p WHERE `t`.`tid` = `p`.`tid`;' #add 
+        tokens = ()
+        self.connect()
+        cur = self.conn.cursor(pymysql.cursors.DictCursor)
+        #print(sql)
+        #print(tokens)
+        cur.execute(sql,tokens)
+        self.data = []
+        for row in cur:
+            self.data.append(row)             
     
     
     

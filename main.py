@@ -162,6 +162,7 @@ START TEAM PAGES:
 def teams():
     t = teamList()
     t.getAll()
+    t.getOrder()
     
     #print(t.data)
     #return ''
@@ -236,11 +237,12 @@ START GAME PAGES:
 def games():
     g = gameList()
     g.getAll()
+    g.getByTeam()
+
     
     print(g.data)
     #return ''
     return render_template('game/games.html', title='Game List', games=g.data)
-
 
 @app.route('/game')
 def game():
@@ -318,6 +320,7 @@ START PLAYER PAGES:
 def players():
     p = playerList()
     p.getAll()
+    p.getByTeam()
     
     print(p.data)
     #return ''
@@ -401,6 +404,7 @@ START matchEvent PAGES:
 def matchEvents():
     e = matchEventList()
     e.getAll()
+    e.getByTeam()
     
     print(e.data)
     #return ''
@@ -412,10 +416,10 @@ def matchEvent():
     e = matchEventList()
     
     allPlayers = playerList()
-    allPlayers.getAll() 
+    allPlayers.getByTeam() 
     
     allGames = gameList()
-    allGames.getAll() 
+    allGames.getByTeam() 
     
     allTeams = teamList()
     allTeams.getAll()     
@@ -448,10 +452,10 @@ def newMatchEvent():
         e.add()
 
         allPlayers = playerList()
-        allPlayers.getAll() 
+        allPlayers.getByTeam() 
         
         allGames = gameList()
-        allGames.getAll() 
+        allGames.getByTeam() 
         
         allTeams = teamList()
         allTeams.getAll() 

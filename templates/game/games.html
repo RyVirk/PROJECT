@@ -6,18 +6,18 @@
 		<table>
 		<tr>
 			<td>gid</td>
-			<td>gname</td>
-			<td>gdate</td>
-			<td>team1</td>
-			<td>team2</td>			
+			<td>game name</td>
+			<td>date</td>
+			<td>HOME</td>
+			<td>AWAY</td>			
 		</tr>
     {% for game in games %}
 		<tr>
 			<td><a href="game?gid={{ game.gid }}">{{ game.gid }}</a></td>
-			<td>{{ game.team1 }} vs. {{ game.team2 }}</td>
+			<td><a href= "gameDetails?game name={{ game.home }} vs. {{ game.away }}">{{ game.home }} vs. {{ game.away }}</td>
 			<td>{{ game.gdate }}</td>			
-			<td>{{ game.team1 }}</td>	
-			<td>{{ game.team2 }}</td>			
+			<td>{{ game.home }}</td>	
+			<td>{{ game.away }}</td>			
 		</tr>
     {% endfor %}
 	</table>
