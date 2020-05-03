@@ -44,7 +44,7 @@ class playerList(baseObject):
         FROM `teams` t, `players` p 
         WHERE `t`.`tid` = `p`.`tid`;          
         '''    
-        sql = 'SELECT * FROM `teams` t, `players` p WHERE `t`.`tid` = `p`.`tid`;' #add 
+        sql = 'SELECT * FROM `teams` t, `players` p WHERE `t`.`tid` = `p`.`tid` ORDER BY `t`.`tname`;' #add 
         tokens = ()
         self.connect()
         cur = self.conn.cursor(pymysql.cursors.DictCursor)
