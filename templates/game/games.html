@@ -14,7 +14,7 @@
     {% for game in games %}
 		<tr>
 			<td><a href="game?gid={{ game.gid }}">{{ game.gid }}</a></td>
-			<td><a href= "gameDetails?game name={{ game.home }} vs. {{ game.away }}">{{ game.home }} vs. {{ game.away }}</td>
+			<td><a href= "gameDetails?gid={{ game.gid }}">{{ game.home }} vs. {{ game.away }}</td>
 			<td>{{ game.gdate }}</td>			
 			<td>{{ game.home }}</td>	
 			<td>{{ game.away }}</td>			

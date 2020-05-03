@@ -2,6 +2,13 @@
 
 {% block content %}
     <h1>Team</h1>
+	{% if msg %}
+      <div tid="errormsg">
+	  {% for err in msg %}
+		{{ err }}<br>
+	  {% endfor %}
+	  </div>
+    {% endif %}	  
 		<form action="/saveteam" method="POST">
 			Team Name:<br>
 			<input type="text" name="tname" value="{{ team.tname }}" /><br><br>

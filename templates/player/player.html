@@ -2,6 +2,13 @@
 
 {% block content %}
     <h1>Player</h1>
+	{% if msg %}
+      <div pid="errormsg">
+	  {% for err in msg %}
+		{{ err }}<br>
+	  {% endfor %}
+	  </div> 
+    {% endif %}	
 		<form action="/saveplayer" method="POST">
 			Name:<br>
 			<input type="text" name="pname" value="{{ player.pname }}" /><br><br>

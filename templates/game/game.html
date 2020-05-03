@@ -2,6 +2,13 @@
 
 {% block content %}
     <h1>Game</h1>
+	{% if msg %}
+      <div gid="errormsg">
+	  {% for err in msg %}
+		{{ err }}<br>
+	  {% endfor %}
+	  </div>
+    {% endif %}	
 	<form action="/savegame" method="POST">
 		Game:<br>
 		<input type="text" name="gname" value="{{ game.gname }}" /><br><br>

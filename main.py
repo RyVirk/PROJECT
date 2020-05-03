@@ -216,11 +216,15 @@ def saveteam():
         t.set('tname',request.form.get('tname'))
         t.set('country',request.form.get('country'))
         t.set('groupnum',request.form.get('groupnum'))
-        t.add()  
-        t.update()
-        print(t.data)
-        #return ''
-        return render_template('team/savedteam.html', title='Team Saved', team=t.data[0])        
+        t.add() 
+        if t.verifyChange():         
+            t.update()
+            print(t.data)
+            #return ''
+            return render_template('team/savedteam.html', title='Team Saved', team=t.data[0]) 
+        else:   
+            return render_template('team/team.html', title='Team Not Saved', 
+            team=t.data[0],msg=t.errorList)        
 '''
 =======================================
 END TEAM PAGES:
@@ -262,6 +266,30 @@ def game():
     #return ''
     return render_template('game/game.html', title='Game', game=g.data[0], tl= allTeams.data)
 
+
+# GAME SUMMARY PAGE BELOW
+  
+@app.route('/gameDetails')
+def gameDetails():
+    g = gameList()     
+    gameSummary = gameList()
+    gameSummary.getSummary(request.args.get(g.pk))    
+     
+    if request.args.get(g.pk) is None:
+       return render_template('error.html', msg='No game id given')
+
+    
+    g.getById(request.args.get(g.pk))
+    if len(g.data) <= 0:
+        return render_template('error.html', msg='Game not found')
+            
+        
+    print(g.data)
+    #print(gameSummary.data)
+    return render_template('game/gameDetails.html', title='Game Summmary', games=g.data, gs= gameSummary.data) 
+
+###############
+
 @app.route('/newgame',methods = ['GET','POST'])
 def newgame():
     if request.form.get('gname') is None:
@@ -280,7 +308,9 @@ def newgame():
         g.set('gdate',request.form.get('gdate'))
         g.set('team1',request.form.get('team1'))
         g.set('team2',request.form.get('team2'))
-        g.add()  
+        g.add() 
+        allTeams = teamList()
+        allTeams.getAll()         
         if g.verifyNew():     
             g.insert()
             print(g.data)
@@ -288,7 +318,7 @@ def newgame():
             game=g.data[0])
         else:    
             return render_template('game/newgame.html', title='Game Not Saved', 
-            game=g.data[0],msg=g.errorList)
+            game=g.data[0],msg=g.errorList, tl=allTeams.data)
         
 @app.route('/savegame',methods = ['GET','POST'])
 def savegame():
@@ -298,11 +328,18 @@ def savegame():
         g.set('gdate',request.form.get('gdate'))
         g.set('team1',request.form.get('team1'))
         g.set('team2',request.form.get('team2'))
-        g.add()  
-        g.update()
-        print(g.data)
-        #return ''
-        return render_template('game/savedgame.html', title='Game Saved', game=g.data[0])      
+        g.add() 
+        allTeams = teamList()
+        allTeams.getAll()         
+        if g.verifyNew():         
+            g.update()
+            print(g.data)
+            #return ''
+            return render_template('game/savedgame.html', title='Game Saved', game=g.data[0])      
+        else:
+            return render_template('game/game.html', title='Game Not Saved', 
+            game=g.data[0],msg=g.errorList, tl=allTeams.data)        
+        
 '''
 =======================================
 END GAME PAGES:
@@ -365,7 +402,9 @@ def newplayer():
         p.set('age',request.form.get('age'))
         p.set('position',request.form.get('position'))
         p.set('tid',request.form.get('tid')) #possible problem with naming
-        p.add()  
+        p.add() 
+        allTeams = teamList()
+        allTeams.getAll()
         if p.verifyNew():     
             p.insert()
             print(p.data)
@@ -373,7 +412,7 @@ def newplayer():
             player=p.data[0])
         else:    
             return render_template('player/newplayer.html', title='Player Not Saved', 
-            player=p.data[0],msg=p.errorList)
+            player=p.data[0],msg=p.errorList, tl=allTeams.data)
         
 @app.route('/saveplayer',methods = ['GET','POST'])
 def saveplayer():
@@ -383,11 +422,19 @@ def saveplayer():
         p.set('age',request.form.get('age'))
         p.set('position',request.form.get('position'))
         p.set('tid',request.form.get('tid'))
-        p.add()  
-        p.update()
-        print(p.data)
-        #return ''
-        return render_template('player/savedplayer.html', title='Player Saved', player=p.data[0])      
+        p.add()
+        allTeams = teamList()
+        allTeams.getAll()        
+        if p.verifyChange():         
+            p.update()
+            print(p.data)
+            #return ''
+            return render_template('player/savedplayer.html', title='Player Saved', player=p.data[0])      
+        else:
+            return render_template('player/player.html', title='Player Not Saved', 
+            player=p.data[0],msg=p.errorList, tl=allTeams.data)        
+        
+        
 '''
 =======================================
 END PLAYER PAGES:
@@ -447,8 +494,7 @@ def newMatchEvent():
         e.set('etime','')
         e.set('pid','')
         e.set('gid','')
-        e.set('tid','')
-        e.set('id','')        
+        e.set('tid','')       
         e.add()
 
         allPlayers = playerList()
@@ -469,9 +515,16 @@ def newMatchEvent():
         e.set('etime',request.form.get('etime'))
         e.set('pid',request.form.get('pid')) #possible problem with naming
         e.set('gid',request.form.get('gid'))
-        e.set('tid',request.form.get('tid'))
-        e.set('id',request.form.get('id'))        
-        e.add()  
+        e.set('tid',request.form.get('tid'))      
+        e.add() 
+        allPlayers = playerList()
+        allPlayers.getByTeam() 
+        
+        allGames = gameList()
+        allGames.getByTeam() 
+        
+        allTeams = teamList()
+        allTeams.getAll()         
         if e.verifyNew():     
             e.insert()
             print(e.data)
@@ -479,7 +532,7 @@ def newMatchEvent():
             matchEvent=e.data[0])
         else:    
             return render_template('matchEvent/newMatchEvent.html', title='matchEvent Not Saved', 
-            matchEvent=e.data[0],msg=e.errorList)
+            matchEvent=e.data[0],msg=e.errorList, pl= allPlayers.data, gl= allGames.data, tl= allTeams.data)
         
 @app.route('/saveMatchEvent',methods = ['GET','POST'])
 def saveMatchEvent():
@@ -490,13 +543,27 @@ def saveMatchEvent():
         e.set('etime',request.form.get('etime'))
         e.set('pid',request.form.get('pid'))
         e.set('gid',request.form.get('gid'))
-        e.set('tid',request.form.get('tid'))
-        e.set('id',request.form.get('id'))        
-        e.add()  
-        e.update()
-        print(e.data)
-        #return ''
-        return render_template('matchEvent/savedMatchEvent.html', title='matchEvent Saved', matchEvent=e.data[0])      
+        e.set('tid',request.form.get('tid'))       
+        e.add()
+        allPlayers = playerList()
+        allPlayers.getByTeam() 
+        
+        allGames = gameList()
+        allGames.getByTeam() 
+        
+        allTeams = teamList()
+        allTeams.getAll()         
+        if e.verifyChange():        
+            e.update()
+            print(e.data)
+            #return ''
+            return render_template('matchEvent/savedMatchEvent.html', title='matchEvent Saved', matchEvent=e.data[0])
+        else:
+            return render_template('matchEvent/matchEvent.html', title='matchEvent Not Saved', 
+            matchEvent=e.data[0],msg=e.errorList, pl= allPlayers.data, gl= allGames.data, tl= allTeams.data)        
+           
+      
+        
 '''
 =======================================
 END matchEvent PAGES:

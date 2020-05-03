@@ -7,19 +7,22 @@ class gameList(baseObject):
         
     def verifyNew(self,n=0):
         self.errorList = []
-        '''
-        team1= self.data[n]['team1']
-        team2= self.data[n]['team2']        
-        t = teamList()
-        t.getByID(tid)
-        team1 = t.data[0]['tname']
-        
-        t2 = teamList2()
-        t2.getByID(tid)
-        team2 = t2.data[0]['tname']
-        '''
+
+        if len(self.data[n]['gname']) == 0:
+            self.errorList.append("Game name cannot be blank.")
+        if len(self.data[n]['gdate']) == 0:
+            self.errorList.append("Date cannot be blank.")    
+            
+            
         
         
+        if len(self.errorList) > 0:
+            return False
+        else:
+            return True   
+
+    def verifyChange(self,n=0):
+        self.errorList = [] 
         
         if len(self.data[n]['gname']) == 0:
             self.errorList.append("Game name cannot be blank.")
@@ -32,7 +35,7 @@ class gameList(baseObject):
         if len(self.errorList) > 0:
             return False
         else:
-            return True    
+            return True              
     
     
     
@@ -52,6 +55,54 @@ class gameList(baseObject):
         self.data = []
         for row in cur:
             self.data.append(row)    
+            
+            
+            
+            
+#Game Summary Function
+    def getSummary(self, gid):
+    
+        '''
+        SELECT *, t.tname as home, a.tname as away 
+        FROM `players` p, `games` g, `matchEvents` e, `teams` t, `teams` a 
+        WHERE `g`.`gid` = `e`.`gid` AND `g`.`team1` = `t`.`tid` AND `g`.`team2` = `a`.`tid` 
+        AND `p`.`pid` = `e`.`pid` AND `g`.`gid` = %s;
+        
+        SELECT t.tname FROM `teams` t, `players` p WHERE `t`.`tid` = `p`.`tid`;
+        
+        '''   
+        sql = 'SELECT *, t.tname as home, a.tname as away FROM `players` p, `games` g, `matchEvents` e, `teams` t, `teams` a WHERE `g`.`gid` = `e`.`gid` AND `g`.`team1` = `t`.`tid` AND `g`.`team2` = `a`.`tid` AND `p`.`pid` = `e`.`pid` AND `g`.`gid` = %s;' #add 
+        
+        tokens = (gid)
+        self.connect()
+        cur = self.conn.cursor(pymysql.cursors.DictCursor)
+        #print(sql)
+        #print(tokens)
+        cur.execute(sql,tokens)
+        self.data = []
+        for row in cur:
+            self.data.append(row)      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

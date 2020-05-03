@@ -1,43 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>New Game</h1>
-	{% if msg %}
-      <div gid="errormsg">
-	  {% for err in msg %}
-		{{ err }}<br>
-	  {% endfor %}
-	  </div>
-    {% endif %}
-		
-		<form action="/newgame" method="POST">
-			Game:<br>
-			<input type="text" name="gname" /><br><br>
-			
-			Game Date:<br>
-			<input type="date" name="gdate" /><br><br>
-			
-			TEAM 1:<br>
-			<select name="team1">
-				{% for team in tl %}	
-				<option value="{{team.tid}}">{{team.tname}}</option>
-				{% endfor %}
-			</select>
-
-			<br>
-			<br>
-
-			TEAM 2:<br>
-			<select name="team2">
-				{% for team in tl %}	
-				<option value="{{team.tid}}">{{team.tname}}</option>
-				{% endfor %}
-			</select>			
-			
-			<br>
-			<br>
-			
-			<input type="submit" value="Save Game"/>
-			
-		</form>
+    <h1>Game</h1>
+	<table>
+		<tr>
+			<td>gid</td>
+			<td>date</td>
+			<td>HOME</td>
+			<td>AWAY</td>			
+		</tr>
+    {% for game in games %}
+		<tr>
+			<td>{{ game.gid }}</td>
+			<td>{{ game.gdate }}</td>			
+			<td>{{ game.team1 }}</td>	
+			<td>{{ game.team2 }}</td>			
+		</tr>
+    {% endfor %}
+	</table>
+	
+	<h2>Game Summary</h2>
+	<table>
+		<tr>
+			<td>stat type</td>
+			<td>stat amount</td>
+			<td>minute</td>
+			<td>player</td>
+			<td>team</td>			
+		</tr>
+    {% for game in gs %}
+		<tr>
+			<td>{{ game.ename }}</td>
+			<td>{{ game.estat }}</td>			
+			<td>{{ game.etime }}</td>	
+			<td>{{ game.pname }}</td>
+			<td>{{ game.tid }}</td>			
+		</tr>
+    {% endfor %}
+	</table>
+	
+	
+	
 {% endblock %}

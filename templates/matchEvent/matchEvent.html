@@ -2,15 +2,22 @@
 
 {% block content %}
     <h1>Match Event</h1>
-		<form action="/saveMatchEvent" method="POST">
+	{% if msg %}
+      <div gid="errormsg">
+	  {% for err in msg %}
+		{{ err }}<br>
+	  {% endfor %}
+	  </div>
+    {% endif %}		
+		<form action="/saveMatchEvent" method= "POST">
 			Event Name:<br>
 			<input type="text" name="ename" value="{{ matchEvent.ename }}" /><br><br>
 			
-			Stat:<br>
+			Stat Amount:<br>
 			<input type="text" name="estat" value="{{ matchEvent.estat }}"/><br><br>	
 			
 			Event Time:<br>
-			<label for="quantity">1 minute - 120 minutes: </label>
+			<label for="quantity">1 minute - 120 minutes: </label><br>
 			<input type="number" name="etime" min="1" max="120" /><br><br>
 			
 			Player:<br>
@@ -38,12 +45,12 @@
 				{% endfor %}
 			</select>			
 
-		<input type="hidden" name="eid" value="{{ matchEvent.eid }}" />
+			<input type="hidden" name="eid" value="{{ matchEvent.eid }}" />
 			
 			<br>
 			<br>
 			
-			<input type="Submit" value="Save Customer"/>
+			<input type="Submit" value="Save Match Event"/>
 		
 		
 		</form>
