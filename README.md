@@ -1,4 +1,4 @@
-# PROJECT
+# PROJECT DOCUMENTATION
 Narrative:
 
 - This app is for logging soccer match information based on a sixteen team database.
